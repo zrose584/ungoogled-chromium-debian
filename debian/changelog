@@ -1,3 +1,35 @@
+chromium-browser (62.0.3202.75-1~deb9u1) stretch-security; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2017-5124: UXSS with MHTML. Reported by Anonymous
+    - CVE-2017-5125: Heap overflow in Skia. Reported by Anonymous
+    - CVE-2017-5126: Use after free in PDFium. Reported by Luat Nguyen
+    - CVE-2017-5127: Use after free in PDFium. Reported by Luat Nguyen
+    - CVE-2017-5128: Heap overflow in WebGL. Reported by Omair
+    - CVE-2017-5129: Use after free in WebAudio. Reported by Omair
+    - CVE-2017-5131: Out of bounds write in Skia. Reported by Anonymous
+    - CVE-2017-5132: Incorrect stack manipulation in WebAssembly. Reported by
+      Gaurav Dewan
+    - CVE-2017-5133: Out of bounds write in Skia. Reported by Aleksandar
+      Nikolic
+    - CVE-2017-15386: UI spoofing in Blink. Reported by WenXu Wu
+    - CVE-2017-15387: Content security bypass. Reported by Jun Kokatsu
+    - CVE-2017-15388: Out of bounds read in Skia. Reported by Kushal Arvind
+      Shah
+    - CVE-2017-15389: URL spoofing in OmniBox. Reported by xisigr
+    - CVE-2017-15390: URL spoofing in OmniBox. Reported by Haosheng Wang
+    - CVE-2017-15391: Extension limitation bypass in Extensions. Reported by
+      João Lucas Melo Brasio
+    - CVE-2017-15392: Incorrect registry key handling in PlatformIntegration.
+      Reported by Xiaoyin Liu
+    - CVE-2017-15393: Referrer leak in Devtools. Reported by Svyat Mitin
+    - CVE-2017-15394: URL spoofing in extensions UI. Reported by Sam
+    - CVE-2017-15395: Null pointer dereference in ImageCapture. Reported by
+      Johannes Bergman
+    - CVE-2017-15396: Stack overflow in V8. Reported by Yuan Deng
+
+ -- Michael Gilbert <mgilbert@debian.org>  Sun, 05 Nov 2017 03:09:35 +0000
+
 chromium-browser (61.0.3163.100-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release
