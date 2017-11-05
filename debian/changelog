@@ -1,3 +1,24 @@
+chromium-browser (61.0.3163.100-1~deb9u1) stretch-security; urgency=medium
+
+  * New upstream stable release
+    - CVE-2017-5111: Use after free in PDFium. Reported by Luật Nguyễn
+    - CVE-2017-5112: Heap buffer overflow in WebGL. Reported by Tobias Klein
+    - CVE-2017-5113: Heap buffer overflow in Skia. Reported by Anonymous
+    - CVE-2017-5114: Memory lifecycle issue in PDFium. Reported by Ke Liu
+    - CVE-2017-5115: Type confusion in V8. Reported by Marco Giovannini
+    - CVE-2017-5116: Type confusion in V8. Reported by Anonymous
+    - CVE-2017-5117: Use of uninitialized value in Skia. Reported by Tobias
+      Klein
+    - CVE-2017-5118: Bypass of Content Security Policy in Blink. Reported by
+      WenXu Wu
+    - CVE-2017-5119: Use of uninitialized value in Skia. Reported by Anonymous
+    - CVE-2017-5120: Potential HTTPS downgrade during redirect navigation.
+      Reported by Xiaoyin Liu
+    - CVE-2017-5121: Out-of-bounds access in V8. Reported by Jordan Rabet
+    - CVE-2017-5122: Out-of-bounds access in V8. Reported by Choongwoo Han
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 27 Sep 2017 02:03:41 +0000
+
 chromium-browser (60.0.3112.78-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release.
