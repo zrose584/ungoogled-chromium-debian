@@ -2,7 +2,6 @@ manpage.patch
 master-preferences.patch
 
 gn/parallel.patch
-gn/bootstrap.patch
 gn/buildflags.patch
 
 disable/promo.patch
@@ -12,7 +11,8 @@ disable/third-party-cookies.patch
 disable/external-components.patch
 
 fixes/mojo.patch
-fixes/crc32.patch
+fixes/webrtc.patch
+fixes/optimize.patch
 fixes/ps-print.patch
 fixes/gpu-timeout.patch
 fixes/widevine-revision.patch

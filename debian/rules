@@ -39,11 +39,11 @@ defines+=is_debug=false \
          use_gconf=false \
          use_sysroot=false \
          use_openh264=false \
-         use_vulcanize=false \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
          rtc_libvpx_build_vp9=false \
          treat_warnings_as_errors=false \
+         optimize_webui=false \
          enable_nacl=false \
          enable_nacl_nonsfi=false \
          enable_google_now=false \
@@ -60,6 +60,7 @@ defines+=use_gio=true \
          link_pulseaudio=true \
          enable_widevine=true \
          use_jumbo_build=true \
+         use_system_freetype=true \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
@@ -99,11 +100,12 @@ override_dh_auto_build-arch:
 	./out/Release/gn gen out/Release --args="$(defines)"
 	ninja $(njobs) -C out/Release chrome chrome_sandbox content_shell chromedriver
 	mv out/Release/chrome out/Release/chromium || true
-	mv out/Release/chrome.1 out/Release/chromium.1 || true
 	mv out/Release/content_shell out/Release/chromium-shell || true
 	mv out/Release/chrome_sandbox out/Release/chrome-sandbox || true
 	mv out/Release/locales/en-US.pak out/Release/resources || true
 	chmod 4755 out/Release/chrome-sandbox # suid sandbox
+	sed -e s/@@PACKAGE@@/chromium/g -e s/@@MENUNAME@@/chromium/g \
+	    < chrome/app/resources/manpage.1.in > out/Release/chromium.1
 
 override_dh_auto_build-indep:
 	ninja $(njobs) -C out/Release packed_resources
