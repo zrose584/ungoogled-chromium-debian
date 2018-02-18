@@ -10,19 +10,18 @@ disable/google-api-warning.patch
 disable/third-party-cookies.patch
 
 fixes/mojo.patch
-fixes/angle.patch
 fixes/includes.patch
+fixes/optional.patch
 fixes/optimize.patch
 fixes/ps-print.patch
 fixes/gpu-timeout.patch
+fixes/duplicate-name.patch
 fixes/widevine-revision.patch
 fixes/chromedriver-revision.patch
 
-system/atk.patch
 system/icu.patch
 system/vpx.patch
 system/gtk2.patch
 system/nspr.patch
 system/event.patch
 system/ffmpeg.patch
-system/harfbuzz.patch
