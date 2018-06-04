@@ -1,3 +1,88 @@
+chromium-browser (66.0.3359.117-1~deb9u1) stretch-security; urgency=medium
+
+  * New upstream stable release.
+    - CVE-2018-6056: Incorrect derived class instantiation in V8. Reported by
+      lokihardt
+    - CVE-2018-6057: Incorrect permissions on shared memory. Reported by Gal
+      Beniamini
+    - CVE-2018-6060: Use after free in Blink. Reported by Omair
+    - CVE-2018-6061: Race condition in V8. Reported by Guang Gong
+    - CVE-2018-6062: Heap buffer overflow in Skia. Reported by Anonymous
+    - CVE-2018-6063: Incorrect permissions on shared memory. Reported by Gal
+      Beniamini
+    - CVE-2018-6064: Type confusion in V8. Reported by lokihardt
+    - CVE-2018-6065: Integer overflow in V8. Reported by Mark Brand
+    - CVE-2018-6066: Same Origin Bypass via canvas. Reported by Masato Kinugawa
+    - CVE-2018-6067: Buffer overflow in Skia. Reported by Ned Williamson
+    - CVE-2018-6068: Object lifecycle issues in Chrome Custom Tab. Reported by
+      Luan Herrera
+    - CVE-2018-6069: Stack buffer overflow in Skia. Reported by Wanglu &
+      Yangkang
+    - CVE-2018-6070: CSP bypass through extensions. Reported by Rob Wu
+    - CVE-2018-6071: Heap bufffer overflow in Skia. Reported by Anonymous
+    - CVE-2018-6072: Integer overflow in PDFium. Reported by Atte Kettunen
+    - CVE-2018-6073: Heap bufffer overflow in WebGL. Reported by Omair
+    - CVE-2018-6074: Mark-of-the-Web bypass. Reported by Abdulrahman Alqabandi
+    - CVE-2018-6075: Overly permissive cross origin downloads. Reported by Inti
+      De Ceukelaire
+    - CVE-2018-6076: Incorrect handling of URL fragment identifiers in Blink.
+      Reported by Mateusz Krzeszowiec
+    - CVE-2018-6077: Timing attack using SVG filters. Reported by Khalil Zhani
+    - CVE-2018-6078: URL Spoof in OmniBox. Reported by Khalil Zhani
+    - CVE-2018-6079: Information disclosure via texture data in WebGL. Reported
+      by Ivars Atteka
+    - CVE-2018-6080: Information disclosure in IPC call. Reported by Gal
+      Beniamini
+    - CVE-2018-6081: XSS in interstitials. Reported by Rob Wu
+    - CVE-2018-6082: Circumvention of port blocking. Reported by WenXu Wu
+    - CVE-2018-6083: Incorrect processing of AppManifests. Reported by Jun
+      Kokatsu
+    - CVE-2018-6085: Use after free in Disk Cache. Reported by Ned Williamson
+    - CVE-2018-6086: Use after free in Disk Cache. Reported by Ned Williamson
+    - CVE-2018-6087: Use after free in WebAssembly. Reported by Anonymous
+    - CVE-2018-6088: Use after free in PDFium. Reported by Anonymous
+    - CVE-2018-6089: Same origin policy bypass in Service Worker. Reported by
+      Rob Wu
+    - CVE-2018-6090: Heap buffer overflow in Skia. Reported by ZhanJia Song
+    - CVE-2018-6091: Incorrect handling of plug-ins by Service Worker.
+      Reported by Jun Kokatsu
+    - CVE-2018-6092: Integer overflow in WebAssembly. Reported by Natalie
+      Silvanovich
+    - CVE-2018-6093: Same origin bypass in Service Worker. Reported by Jun
+      Kokatsu
+    - CVE-2018-6094: Exploit hardening regression in Oilpan. Reported by Chris
+      Rohlf
+    - CVE-2018-6095: Lack of meaningful user interaction requirement before
+      file upload. Reported by Abdulrahman Alqabandi
+    - CVE-2018-6096: Fullscreen UI spoof. Reported by WenXu Wu
+    - CVE-2018-6097: Fullscreen UI spoof. Reported by xisigr
+    - CVE-2018-6098: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6099: CORS bypass in ServiceWorker. Reported by Jun Kokatsu
+    - CVE-2018-6100: URL spoof in Omnibox. Reported by Lnyas Zhang
+    - CVE-2018-6101: Insufficient protection of remote debugging prototol in
+      DevTools . Reported by Rob Wu
+    - CVE-2018-6102: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6103: UI spoof in Permissions. Reported by Khalil Zhani
+    - CVE-2018-6104: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6105: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6106: Incorrect handling of promises in V8. Reported by
+      lokihardt
+    - CVE-2018-6107: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6108: URL spoof in Omnibox. Reported by Khalil Zhani
+    - CVE-2018-6109: Incorrect handling of files by FileAPI. Reported by
+      Dominik Weber
+    - CVE-2018-6110: Incorrect handling of plaintext files via file:// .
+      Reported by Wenxiang Qian
+    - CVE-2018-6111: Heap-use-after-free in DevTools. Reported by Khalil Zhani
+    - CVE-2018-6112: Incorrect URL handling in DevTools. Reported by Rob Wu
+    - CVE-2018-6113: URL spoof in Navigation. Reported by Khalil Zhani
+    - CVE-2018-6114: CSP bypass. Reported by Lnyas Zhang
+    - CVE-2018-6116: Incorrect low memory handling in WebAssembly. Reported by
+      Chengdu Security Response Center
+    - CVE-2018-6117: Confusing autofill settings. Reported by Spencer Dailey
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 25 Apr 2018 23:48:58 +0000
+
 chromium-browser (64.0.3282.119-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release.

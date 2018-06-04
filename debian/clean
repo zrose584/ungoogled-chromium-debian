@@ -21,3 +21,5 @@ third_party/zlib/BUILD.gn
 third_party/icu/BUILD.gn
 third_party/opus/BUILD.gn
 third_party/freetype/BUILD.gn
+third_party/fontconfig/BUILD.gn
+build/config/freetype/freetype.gni

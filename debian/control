@@ -95,6 +95,7 @@ Depends:
  x11-utils,
  xdg-utils,
 Recommends:
+ libgl1-mesa-dri,
  fonts-liberation,
 Suggests:
  chromium-l10n,

@@ -36,12 +36,12 @@ endif
 defines+=is_debug=false \
          use_gtk3=false \
          use_ozone=false \
-         use_gconf=false \
          use_sysroot=false \
          use_openh264=false \
          use_jumbo_build=false \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
+         use_system_harfbuzz=false \
          rtc_libvpx_build_vp9=false \
          treat_warnings_as_errors=false \
          optimize_webui=false \
@@ -87,10 +87,9 @@ override_dh_auto_configure:
 	# use system flot
 	for file in $(flotpaths); do ln -sf $$file third_party/flot; done
 	# strip out system third_party libraries
-	cp third_party/freetype/src/src/psnames/pstables.h .
+	rm -f build/config/freetype/freetype.gni
+	mkdir -p base/third_party/libevent
 	./debian/scripts/unbundle
-	mkdir -p third_party/freetype/src/src/psnames
-	mv pstables.h third_party/freetype/src/src/psnames
 	# build gn
 	./tools/gn/bootstrap/bootstrap.py -s $(njobs)
 	# configure
