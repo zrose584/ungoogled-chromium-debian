@@ -28,8 +28,7 @@ ifeq (arm64,$(DEB_HOST_ARCH))
 defines+=host_cpu=\"arm64\"
 endif
 ifeq (armhf,$(DEB_HOST_ARCH))
-defines+=host_cpu=\"arm\" \
-	 arm_use_neon=false
+defines+=host_cpu=\"arm\" arm_use_neon=false symbol_level=0
 endif
 
 # disabled features
@@ -44,6 +43,7 @@ defines+=is_debug=false \
          use_system_harfbuzz=false \
          rtc_libvpx_build_vp9=false \
          treat_warnings_as_errors=false \
+         remove_webcore_debug_symbols=true \
          optimize_webui=false \
          enable_nacl=false \
          enable_nacl_nonsfi=false \
@@ -60,7 +60,12 @@ defines+=use_gio=true \
          use_pulseaudio=true \
          link_pulseaudio=true \
          enable_widevine=true \
+         use_libjpeg_turbo=true \
+         use_system_libjpeg=true \
          use_system_freetype=true \
+         concurrent_links=1 \
+         use_jumbo_build=true \
+         jumbo_file_merge_limit=16 \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
@@ -131,8 +136,6 @@ override_dh_fixperms:
 	dh_fixperms --exclude chrome-sandbox
 
 override_dh_strip:
-	# skip dbgsym package for widevine to prevent duplication of the src package
-	dh_strip -pchromium-widevine --no-automatic-dbgsym
 	# this line can be removed once stretch is released
 	dh_strip --remaining-packages --ddeb-migration='chromium-dbg (<< 47.0.2526.80-4~)'
 
