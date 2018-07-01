@@ -1,6 +1,10 @@
 chromium-browser (67.0.3396.87-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release.
+    - CVE-2018-6118: Use after free in Media Cache. Reported by Ned Williamson
+    - CVE-2018-6120: Heap buffer overflow in PDFium. Reported by Zhou Aiting
+    - CVE-2018-6121: Privilege Escalation in extensions.
+    - CVE-2018-6122: Type confusion in V8.
     - CVE-2018-6123: Use after free in Blink. Reported by Looben Yang
     - CVE-2018-6124: Type confusion in Blink. Reported by Guang Gong
     - CVE-2018-6125: Overly permissive policy in WebUSB. Reported by Yubico
