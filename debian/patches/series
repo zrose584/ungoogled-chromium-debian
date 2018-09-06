@@ -6,6 +6,7 @@ gn/parallel.patch
 gn/buildflags.patch
 
 arm/skia.patch
+arm/crashpad.patch
 arm/gcc_skcms_ice.patch
 
 fixes/mojo.patch
@@ -19,12 +20,12 @@ fixes/gpu-timeout.patch
 fixes/empty-array.patch
 fixes/ownership-error.patch
 fixes/widevine-revision.patch
-fixes/chromedriver-revision.patch
 
 disable/android.patch
 disable/fuzzers.patch
 disable/openh264.patch
 disable/perfetto.patch
+disable/swiftshader.patch
 disable/google-api-warning.patch
 disable/third-party-cookies.patch
 
