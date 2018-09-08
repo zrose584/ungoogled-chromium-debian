@@ -110,6 +110,10 @@ Conflicts:
  libnettle4,
  libsecret-1-0 (<< 0.18),
  libgl1-mesa-swx11,
+Breaks:
+ chromium-common (<< ${binary:Version}),
+Replaces:
+ chromium-common (<< ${binary:Version}),
 Description: web browser
  Web browser that aims to build a safer, faster, and more stable internet
  browsing experience.
