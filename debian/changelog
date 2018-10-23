@@ -1,3 +1,11 @@
+chromium-browser (69.0.3497.92-1~deb9u1) stretch-security; urgency=medium
+
+  * New upstream security release.
+    - Function signature mismatch in WebAssembly. Reported by Kevin Cheung
+    - URL Spoofing in Omnibox. Reported by evi1m0
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 14 Sep 2018 00:48:39 +0000
+
 chromium-browser (69.0.3497.81-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release.
