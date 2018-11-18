@@ -2,9 +2,11 @@ debianization/manpage.patch
 debianization/master-preferences.patch
 
 gn/libcxx.patch
+gn/sysroot.patch
 gn/parallel.patch
 
 arm/skia.patch
+arm/crashpad.patch
 arm/gcc_skcms_ice.patch
 
 fixes/mojo.patch
