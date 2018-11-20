@@ -1,3 +1,10 @@
+chromium-browser (70.0.3538.110-1~deb9u1) stretch-security; urgency=medium
+
+  * New upstream security release.
+    - CVE-2018-17479: Use-after-free in GPU.
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 21 Nov 2018 02:17:45 +0000
+
 chromium-browser (70.0.3538.102-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream security release.
