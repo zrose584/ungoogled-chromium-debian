@@ -5,15 +5,12 @@ gn/libcxx.patch
 gn/sysroot.patch
 gn/parallel.patch
 
-arm/skia.patch
-arm/crashpad.patch
 arm/gcc_skcms_ice.patch
 
 fixes/mojo.patch
 fixes/sizet.patch
 fixes/alignof.patch
 fixes/polymer.patch
-fixes/widevine.patch
 fixes/optimize.patch
 fixes/ps-print.patch
 fixes/as-needed.patch
@@ -24,14 +21,18 @@ fixes/constructor.patch
 fixes/gpu-timeout.patch
 fixes/empty-array.patch
 fixes/ownership-error.patch
-fixes/member-assignment.patch
+fixes/autocompletematch.patch
 fixes/widevine-revision.patch
+fixes/ambiguous-overloads.patch
+fixes/chromedriver-revision.patch
 
+disable/unrar.patch
 disable/signin.patch
 disable/android.patch
 disable/fuzzers.patch
 disable/openh264.patch
 disable/perfetto.patch
+disable/installer.patch
 disable/swiftshader.patch
 disable/google-api-warning.patch
 disable/third-party-cookies.patch
