@@ -107,7 +107,7 @@ override_dh_auto_configure:
 	./debian/scripts/unbundle
 	# build gn
 	cp base/numerics/safe_conversions_arm_impl.h base/numerics/safe_math_arm_impl.h tools/gn/base/numerics
-	./tools/gn/bootstrap/bootstrap.py -s $(njobs)
+	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -s $(njobs)
 	# configure
 	./out/Release/gn gen out/Release --args="$(defines)"
 
