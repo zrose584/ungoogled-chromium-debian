@@ -39,10 +39,10 @@ endif
 defines+=gtk_version=2 \
          is_debug=false \
          use_allocator=\"none\" \
+         use_goma=false \
          use_ozone=false \
          use_sysroot=false \
          use_openh264=false \
-         use_jumbo_build=false \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
          use_system_harfbuzz=false \
@@ -56,8 +56,6 @@ defines+=gtk_version=2 \
          enable_one_click_signin=false \
          enable_hangout_services_extension=false \
          enable_iterator_debugging=false \
-         goma_dir=\"\" \
-         gold_path=\"\" \
          linux_use_bundled_binutils=false \
 
 # enabled features
@@ -71,7 +69,7 @@ defines+=use_gio=true \
          use_system_freetype=true \
          concurrent_links=1 \
          use_jumbo_build=true \
-         jumbo_file_merge_limit=16 \
+         jumbo_file_merge_limit=8 \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
