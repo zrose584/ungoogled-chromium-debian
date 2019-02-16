@@ -21,3 +21,13 @@ author: Michael Gilbert <mgilbert@debian.org>
      default:
        DVLOG(1) << "Unknown VideoCodec: " << video_codec;
    }
+@@ -567,8 +563,7 @@ bool AVStreamToVideoDecoderConfig(const
+     // We also ignore the resolution for AV1, since it's new and it's easy
+     // to make it behave correctly from the get-go.
+     // TODO(hubbe): Skip this inference for all codecs.
+-    if (codec_context->codec_id != AV_CODEC_ID_VP9 &&
+-        codec_context->codec_id != AV_CODEC_ID_AV1) {
++    if (codec_context->codec_id != AV_CODEC_ID_VP9) {
+       // Otherwise, assume that SD video is usually Rec.601, and HD is usually
+       // Rec.709.
+       color_space = (natural_size.height() < 720) ? VideoColorSpace::REC601()
