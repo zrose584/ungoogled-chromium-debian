@@ -3,7 +3,6 @@ debianization/master-preferences.patch
 
 gn/libcxx.patch
 gn/parallel.patch
-gn/bfd-linker.patch
 
 arm/crashpad.patch
 arm/gcc_skcms_ice.patch
