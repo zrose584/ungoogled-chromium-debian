@@ -111,8 +111,10 @@ Conflicts:
  libgl1-mesa-swx11,
 Breaks:
  chromium-common (<< ${binary:Version}),
+ chromium-sandbox (<< ${binary:Version}),
 Replaces:
  chromium-common (<< ${binary:Version}),
+ chromium-sandbox (<< ${binary:Version}),
 Description: web browser
  Web browser that aims to build a safer, faster, and more stable internet
  browsing experience.

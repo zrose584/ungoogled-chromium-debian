@@ -1,3 +1,10 @@
+chromium (72.0.3626.96-1~deb9u2) stretch-security; urgency=medium
+
+  * Fix crash when launched in headless mode (closes: #922794).
+  * Replace files from chromium-sandbox on upgrade (closes: #923298).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Tue, 26 Feb 2019 02:53:04 +0000
+
 chromium (72.0.3626.96-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream stable release.
