@@ -33,16 +33,19 @@ warnings/null-destination.patch
 warnings/int-in-bool-context.patch
 warnings/explicit-constructor.patch
 
+system/vpx16.patch
 system/vpx.patch
+system/icu57.patch
 system/icu.patch
 system/jpeg.patch
 system/lcms.patch
 system/nspr.patch
 system/zlib.patch
 system/event.patch
-system/jsoncpp.patch
+system/ffmpeg.patch
 system/ffmpeg34.patch
 system/openjpeg.patch
+system/openjpeg21.patch
 system/convertutf.patch
 
 inox-patchset/chromium-skia-harmony.patch
