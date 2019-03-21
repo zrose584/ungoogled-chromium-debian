@@ -42,6 +42,7 @@ system/lcms.patch
 system/nspr.patch
 system/zlib.patch
 system/event.patch
+system/libdrm.patch
 system/ffmpeg.patch
 system/ffmpeg34.patch
 system/openjpeg.patch
