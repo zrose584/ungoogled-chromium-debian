@@ -107,7 +107,7 @@ git add debian/ungoogled-upstream/version.txt
 ln -s path/to/ungoogled-chromium  debian/ungoogled-upstream/ungoogled-chromium
 ./debian/rules checkout-ungoogled-chromium
 
-./debian/devutils/merge_patches.sh
+./debian/devutils/update_patches.sh merge
 source debian/devutils/set_quilt_vars.sh
 
 # Setup Chromium source
@@ -117,13 +117,14 @@ mkdir -p build/{src,download_cache}
 
 cd build/src
 # Use quilt to refresh patches. See ungoogled-chromium's docs/developing.md section "Updating patches" for more details
+quilt pop -a
 
 # Remove all patches introduced by ungoogled-chromium
-rm -r debian/patches/{core,extra}
-# Also, make sure carefully revert changes from debian/patches/series
+./debian/devutils/update_patches.sh unmerge
+# Ensure debian/patches/series is formatted correctly, e.g. blank lines
 
-# Quick sanity check of patches
-./debian/ungoogled-upstream/ungoogled-chromium/devutils/check_patch_files.py -p debian/patches
+# Sanity checking for consistency in series file
+./debian/devutils/check_patch_files.sh
 
 # Use git to add changes and commit
 ```
@@ -136,6 +137,15 @@ To add either a primary or secondary branch:
 2. Give the branch a name of the format `DISTRO_CODENAME`. For example, Ubuntu 18.10 (cosmic) should have a branch name `ubuntu_cosmic`.
 3. Make the necessary changes and commit
 4. Submit a Pull Request for your new branch to the branch it is based off of. In the Pull Request, specify the new branch name that should be created. (This is necessary because GitHub doesn't support the creation of branches via PRs)
+
+### Tagging a new version
+
+1. Update the commit or tag version of the ungoogled-chromium repository in `debian/ungoogled-upstream/version.txt` as necessary.
+2. Increment the revision in `debian/distro_revision.txt`. However, if the upstream version was changed in Step 1, reset the revision to `1`.
+3. Use git to add a new tag in the format `{chromium_version}-{revision}.stretch{distro_revision}` where
+	* `chromium_version` is the Chromium version (from the ungoogled-chromium repo)
+	* `revision` is the ungoogled-chromium revision (from the ungoogled-chromium repo)
+	* `distro_revision` is the revision from `debian/distro_revision.txt`
 
 ### Contributing
 
