@@ -86,6 +86,7 @@ defines+=use_gio=true \
          use_system_libjpeg=true \
          use_system_freetype=true \
          use_jumbo_build=true \
+         jumbo_file_merge_limit=8 \
          proprietary_codecs=true \
          ffmpeg_branding=\"ChromeOS\" \
          fieldtrial_testing_like_official_build=true \
