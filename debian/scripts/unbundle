@@ -23,7 +23,7 @@ def strip(path):
                 else:
                     os.remove(removal)
 
-keepers = ('openh264', 'libjpeg')
+keepers = ('openh264', 'libjpeg', 'harfbuzz-ng', 'zlib')
 
 # strip out regenerating files in each build
 def remove_file(path):
