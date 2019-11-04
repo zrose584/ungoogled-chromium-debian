@@ -10,7 +10,6 @@ arm/skia-aarch64-buildfix.patch
 gcc/virtual-destructor.patch
 
 gcc6/sizet.patch
-gcc6/atomic.patch
 gcc6/wtf-hashmap.patch
 gcc6/map-insertion.patch
 gcc6/move-required.patch

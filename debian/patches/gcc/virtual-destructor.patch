@@ -3,8 +3,8 @@ origin: https://chromium-review.googlesource.com/c/chromium/src/+/1645366
 
 --- a/chrome/browser/performance_manager/render_process_user_data.cc
 +++ b/chrome/browser/performance_manager/render_process_user_data.cc
-@@ -116,4 +116,9 @@ void RenderProcessUserData::RenderProces
-                      base::Unretained(process_node_.get()), info.exit_code));
+@@ -123,4 +123,9 @@ void RenderProcessUserData::RenderProces
+   host->RemoveUserData(kRenderProcessUserDataKey);
  }
  
 +void RenderProcessUserData::RenderProcessHostDestroyed(
@@ -13,13 +13,3 @@ origin: https://chromium-review.googlesource.com/c/chromium/src/+/1645366
 +}
 +
  }  // namespace performance_manager
---- a/chrome/browser/performance_manager/render_process_user_data.h
-+++ b/chrome/browser/performance_manager/render_process_user_data.h
-@@ -47,6 +47,7 @@ class RenderProcessUserData : public bas
-   void RenderProcessExited(
-       content::RenderProcessHost* host,
-       const content::ChildProcessTerminationInfo& info) override;
-+  void RenderProcessHostDestroyed(content::RenderProcessHost* host) override;
- 
-   // All instances are linked together in a doubly linked list to allow orderly
-   // destruction at browser shutdown time.

@@ -3,23 +3,23 @@ author: Michael Gilbert <mgilbert@debian.org>
 
 --- a/media/base/supported_types.cc
 +++ b/media/base/supported_types.cc
-@@ -12,8 +12,8 @@
- #include "ui/display/display_switches.h"
- 
+@@ -16,8 +16,8 @@
  #if BUILDFLAG(ENABLE_LIBVPX)
+ // TODO(dalecurtis): This technically should not be allowed in media/base. See
+ // TODO below about moving outside of base.
 -#include "third_party/libvpx/source/libvpx/vpx/vp8dx.h"
 -#include "third_party/libvpx/source/libvpx/vpx/vpx_codec.h"
 +#include <vpx/vp8dx.h>
 +#include <vpx/vpx_codec.h>
  #endif
  
- namespace media {
+ #if defined(OS_ANDROID)
 --- a/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
 +++ b/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
-@@ -17,10 +17,10 @@
- #include <limits>
- #include <vector>
- 
+@@ -32,10 +32,10 @@
+ #include "rtc_base/time_utils.h"
+ #include "rtc_base/trace_event.h"
+ #include "system_wrappers/include/field_trial.h"
 -#include "vpx/vp8cx.h"
 -#include "vpx/vp8dx.h"
 -#include "vpx/vpx_decoder.h"
@@ -29,9 +29,25 @@ author: Michael Gilbert <mgilbert@debian.org>
 +#include <vpx/vpx_decoder.h>
 +#include <vpx/vpx_encoder.h>
  
- #include "absl/memory/memory.h"
- #include "api/video/color_space.h"
-@@ -689,59 +689,12 @@ int VP9EncoderImpl::InitAndSetControlSet
+ namespace webrtc {
+ 
+@@ -401,15 +401,6 @@ bool VP9EncoderImpl::SetSvcRates(
+   }
+   RTC_DCHECK_GT(num_active_spatial_layers_, 0);
+ 
+-  if (higher_layers_enabled && !force_key_frame_) {
+-    // Prohibit drop of all layers for the next frame, so newly enabled
+-    // layer would have a valid spatial reference.
+-    for (size_t i = 0; i < num_spatial_layers_; ++i) {
+-      svc_drop_frame_.framedrop_thresh[i] = 0;
+-    }
+-    force_all_active_layers_ = true;
+-  }
+-
+   current_bitrate_allocation_ = bitrate_allocation;
+   return true;
+ }
+@@ -727,63 +718,12 @@ int VP9EncoderImpl::InitAndSetControlSet
                      inst->VP9().adaptiveQpMode ? 3 : 0);
  
    vpx_codec_control(encoder_, VP9E_SET_FRAME_PARALLEL_DECODING, 0);
@@ -58,27 +74,31 @@ author: Michael Gilbert <mgilbert@debian.org>
 -    }
 -
 -    memset(&svc_drop_frame_, 0, sizeof(svc_drop_frame_));
--    dropping_only_base_layer_ = inter_layer_pred_ == InterLayerPredMode::kOn &&
--                                codec_.mode == VideoCodecMode::kScreensharing &&
--                                num_spatial_layers_ > 1;
--    if (dropping_only_base_layer_) {
--      // Screenshare dropping mode: only the base spatial layer
--      // can be dropped and it doesn't affect other spatial layers.
--      // This mode is preferable because base layer has low bitrate targets
--      // and more likely to drop frames. It shouldn't reduce framerate on other
--      // layers.
--      svc_drop_frame_.framedrop_mode = LAYER_DROP;
+-    const bool reverse_constrained_drop_mode =
+-        inter_layer_pred_ == InterLayerPredMode::kOn &&
+-        codec_.mode == VideoCodecMode::kScreensharing &&
+-        num_spatial_layers_ > 1;
+-    if (reverse_constrained_drop_mode) {
+-      // Screenshare dropping mode: drop a layer only together with all lower
+-      // layers. This ensures that drops on lower layers won't reduce frame-rate
+-      // for higher layers and reference structure is RTP-compatible.
+-      svc_drop_frame_.framedrop_mode = CONSTRAINED_FROM_ABOVE_DROP;
 -      svc_drop_frame_.max_consec_drop = 5;
--      svc_drop_frame_.framedrop_thresh[0] = config_->rc_dropframe_thresh;
--      for (size_t i = 1; i < num_spatial_layers_; ++i) {
--        svc_drop_frame_.framedrop_thresh[i] = 0;
+-      for (size_t i = 0; i < num_spatial_layers_; ++i) {
+-        svc_drop_frame_.framedrop_thresh[i] = config_->rc_dropframe_thresh;
 -      }
+-      // No buffering is needed because the highest layer is always present in
+-      // all frames in CONSTRAINED_FROM_ABOVE drop mode.
+-      layer_buffering_ = false;
 -    } else {
 -      // Configure encoder to drop entire superframe whenever it needs to drop
 -      // a layer. This mode is preferred over per-layer dropping which causes
 -      // quality flickering and is not compatible with RTP non-flexible mode.
 -      svc_drop_frame_.framedrop_mode =
 -          full_superframe_drop_ ? FULL_SUPERFRAME_DROP : CONSTRAINED_LAYER_DROP;
+-      // Buffering is needed only for constrained layer drop, as it's not clear
+-      // which frame is the last.
+-      layer_buffering_ = !full_superframe_drop_;
 -      svc_drop_frame_.max_consec_drop = std::numeric_limits<int>::max();
 -      for (size_t i = 0; i < num_spatial_layers_; ++i) {
 -        svc_drop_frame_.framedrop_thresh[i] = config_->rc_dropframe_thresh;
@@ -91,7 +111,7 @@ author: Michael Gilbert <mgilbert@debian.org>
    // Register callback for getting each spatial layer.
    vpx_codec_priv_output_cx_pkt_cb_pair_t cbp = {
        VP9EncoderImpl::EncoderOutputCodedPacketCallback,
-@@ -867,10 +820,6 @@ int VP9EncoderImpl::Encode(const VideoFr
+@@ -918,22 +858,12 @@ int VP9EncoderImpl::Encode(const VideoFr
      }
    }
  
@@ -99,22 +119,11 @@ author: Michael Gilbert <mgilbert@debian.org>
 -    layer_id.temporal_layer_id_per_spatial[sl_idx] = layer_id.temporal_layer_id;
 -  }
 -
-   vpx_codec_control(encoder_, VP9E_SET_SVC_LAYER_ID, &layer_id);
- 
-   if (requested_rate_settings_) {
-@@ -905,22 +854,9 @@ int VP9EncoderImpl::Encode(const VideoFr
-       if (less_layers_requested || more_layers_requested) {
-         ss_info_needed_ = true;
-       }
--      if (more_layers_requested && !force_key_frame_) {
--        // Prohibit drop of all layers for the next frame, so newly enabled
--        // layer would have a valid spatial reference.
--        for (size_t i = 0; i < num_spatial_layers_; ++i) {
--          svc_drop_frame_.framedrop_thresh[i] = 0;
--        }
--      }
-     }
+   if (layer_id.spatial_layer_id < first_active_layer_) {
+     layer_id.spatial_layer_id = first_active_layer_;
    }
+ 
+   vpx_codec_control(encoder_, VP9E_SET_SVC_LAYER_ID, &layer_id);
  
 -  if (num_spatial_layers_ > 1) {
 -    // Update frame dropping settings as they may change on per-frame basis.
@@ -125,7 +134,7 @@ author: Michael Gilbert <mgilbert@debian.org>
    if (vpx_codec_enc_config_set(encoder_, config_)) {
      return WEBRTC_VIDEO_CODEC_ERROR;
    }
-@@ -983,21 +919,6 @@ int VP9EncoderImpl::Encode(const VideoFr
+@@ -996,21 +926,6 @@ int VP9EncoderImpl::Encode(const VideoFr
      flags = VPX_EFLAG_FORCE_KF;
    }
  
@@ -147,7 +156,7 @@ author: Michael Gilbert <mgilbert@debian.org>
    first_frame_in_picture_ = true;
  
    // TODO(ssilkin): Frame duration should be specified per spatial layer
-@@ -1102,9 +1023,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
+@@ -1115,9 +1030,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
    vp9_info->num_spatial_layers = num_active_spatial_layers_;
  
    vp9_info->num_ref_pics = 0;
@@ -158,7 +167,7 @@ author: Michael Gilbert <mgilbert@debian.org>
      vp9_info->gof_idx = kNoGofIdx;
    } else {
      vp9_info->gof_idx =
-@@ -1144,6 +1063,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
+@@ -1162,6 +1075,7 @@ void VP9EncoderImpl::PopulateCodecSpecif
    first_frame_in_picture_ = false;
  }
  
@@ -166,7 +175,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  void VP9EncoderImpl::FillReferenceIndices(const vpx_codec_cx_pkt& pkt,
                                            const size_t pic_num,
                                            const bool inter_layer_predicted,
-@@ -1399,6 +1319,7 @@ vpx_svc_ref_frame_config_t VP9EncoderImp
+@@ -1417,6 +1331,7 @@ vpx_svc_ref_frame_config_t VP9EncoderImp
  
    return ref_config;
  }
@@ -174,7 +183,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  
  int VP9EncoderImpl::GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt) {
    RTC_DCHECK_EQ(pkt->kind, VPX_CODEC_CX_FRAME_PKT);
-@@ -1442,8 +1363,6 @@ int VP9EncoderImpl::GetEncodedLayerFrame
+@@ -1459,14 +1374,10 @@ int VP9EncoderImpl::GetEncodedLayerFrame
                          input_image_->timestamp());
    encoded_image_.SetSpatialIndex(spatial_index);
  
@@ -182,44 +191,27 @@ author: Michael Gilbert <mgilbert@debian.org>
 -
    TRACE_COUNTER1("webrtc", "EncodedFrameSize", encoded_image_.size());
    encoded_image_.SetTimestamp(input_image_->timestamp());
-   encoded_image_.capture_time_ms_ = input_image_->render_time_ms();
-@@ -1451,10 +1370,8 @@ int VP9EncoderImpl::GetEncodedLayerFrame
-   encoded_image_.content_type_ = (codec_.mode == VideoCodecMode::kScreensharing)
-                                      ? VideoContentType::SCREENSHARE
-                                      : VideoContentType::UNSPECIFIED;
 -  encoded_image_._encodedHeight =
 -      pkt->data.frame.height[layer_id.spatial_layer_id];
 -  encoded_image_._encodedWidth =
 -      pkt->data.frame.width[layer_id.spatial_layer_id];
 +  encoded_image_._encodedHeight = raw_->d_h;
 +  encoded_image_._encodedWidth = raw_->d_w;
-   encoded_image_.timing_.flags = VideoSendTiming::kInvalid;
    int qp = -1;
    vpx_codec_control(encoder_, VP8E_GET_LAST_QUANTIZER, &qp);
-@@ -1472,16 +1389,6 @@ int VP9EncoderImpl::GetEncodedLayerFrame
+   encoded_image_.qp_ = qp;
+@@ -1482,14 +1393,6 @@ int VP9EncoderImpl::GetEncodedLayerFrame
  
  void VP9EncoderImpl::DeliverBufferedFrame(bool end_of_picture) {
    if (encoded_image_.size() > 0) {
 -    if (num_spatial_layers_ > 1) {
 -      // Restore frame dropping settings, as dropping may be temporary forbidden
 -      // due to dynamically enabled layers.
--      svc_drop_frame_.framedrop_thresh[0] = config_->rc_dropframe_thresh;
--      for (size_t i = 1; i < num_spatial_layers_; ++i) {
--        svc_drop_frame_.framedrop_thresh[i] =
--            dropping_only_base_layer_ ? 0 : config_->rc_dropframe_thresh;
+-      for (size_t i = 0; i < num_spatial_layers_; ++i) {
+-        svc_drop_frame_.framedrop_thresh[i] = config_->rc_dropframe_thresh;
 -      }
 -    }
 -
      codec_specific_.codecSpecific.VP9.end_of_picture = end_of_picture;
  
      // No data partitioning in VP9, so 1 partition only.
---- a/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
-+++ b/third_party/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
-@@ -125,7 +125,6 @@ class VP9EncoderImpl : public VP9Encoder
-   const bool dynamic_rate_settings_;
-   const bool full_superframe_drop_;
-   bool dropping_only_base_layer_;
--  vpx_svc_frame_drop_t svc_drop_frame_;
-   bool first_frame_in_picture_;
-   VideoBitrateAllocation current_bitrate_allocation_;
-   absl::optional<RateControlParameters> requested_rate_settings_;

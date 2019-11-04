@@ -3,7 +3,7 @@ author: Michael Gilbert <mgilbert@debian.org>
 
 --- a/extensions/browser/api/declarative_webrequest/webrequest_action.cc
 +++ b/extensions/browser/api/declarative_webrequest/webrequest_action.cc
-@@ -579,7 +579,7 @@ base::Optional<EventResponseDelta> WebRe
+@@ -576,7 +576,7 @@ base::Optional<EventResponseDelta> WebRe
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.cancel = true;
@@ -12,7 +12,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -614,7 +614,7 @@ base::Optional<EventResponseDelta> WebRe
+@@ -611,7 +611,7 @@ base::Optional<EventResponseDelta> WebRe
      return base::nullopt;
    EventResponseDelta result(extension_id, extension_install_time);
    result.new_url = redirect_url_;
@@ -21,7 +21,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -643,7 +643,7 @@ WebRequestRedirectToTransparentImageActi
+@@ -640,7 +640,7 @@ WebRequestRedirectToTransparentImageActi
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.new_url = GURL(kTransparentImageUrl);
@@ -30,7 +30,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -672,7 +672,7 @@ WebRequestRedirectToEmptyDocumentAction:
+@@ -669,7 +669,7 @@ WebRequestRedirectToEmptyDocumentAction:
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.new_url = GURL(kEmptyDocumentUrl);
@@ -39,7 +39,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -774,7 +774,7 @@ base::Optional<EventResponseDelta> WebRe
+@@ -771,7 +771,7 @@ base::Optional<EventResponseDelta> WebRe
  
    EventResponseDelta result(extension_id, extension_install_time);
    result.new_url = GURL(new_url);
@@ -48,7 +48,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -814,7 +814,7 @@ WebRequestSetRequestHeaderAction::Create
+@@ -811,7 +811,7 @@ WebRequestSetRequestHeaderAction::Create
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.modified_request_headers.SetHeader(name_, value_);
@@ -57,7 +57,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -852,7 +852,7 @@ WebRequestRemoveRequestHeaderAction::Cre
+@@ -849,7 +849,7 @@ WebRequestRemoveRequestHeaderAction::Cre
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.deleted_request_headers.push_back(name_);
@@ -66,7 +66,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -901,7 +901,7 @@ WebRequestAddResponseHeaderAction::Creat
+@@ -898,7 +898,7 @@ WebRequestAddResponseHeaderAction::Creat
  
    EventResponseDelta result(extension_id, extension_install_time);
    result.added_response_headers.push_back(make_pair(name_, value_));
@@ -75,7 +75,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -955,7 +955,7 @@ WebRequestRemoveResponseHeaderAction::Cr
+@@ -952,7 +952,7 @@ WebRequestRemoveResponseHeaderAction::Cr
        continue;
      result.deleted_response_headers.push_back(make_pair(name_, current_value));
    }
@@ -84,7 +84,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -1040,7 +1040,7 @@ base::Optional<EventResponseDelta> WebRe
+@@ -1037,7 +1037,7 @@ base::Optional<EventResponseDelta> WebRe
    EventResponseDelta result(extension_id, extension_install_time);
    result.request_cookie_modifications.push_back(
        request_cookie_modification_.Clone());
@@ -93,7 +93,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -1088,7 +1088,7 @@ base::Optional<EventResponseDelta> WebRe
+@@ -1085,7 +1085,7 @@ base::Optional<EventResponseDelta> WebRe
    EventResponseDelta result(extension_id, extension_install_time);
    result.response_cookie_modifications.push_back(
        response_cookie_modification_.Clone());
@@ -102,7 +102,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  //
-@@ -1128,7 +1128,7 @@ WebRequestSendMessageToExtensionAction::
+@@ -1125,7 +1125,7 @@ WebRequestSendMessageToExtensionAction::
    CHECK(request_data.stage & stages());
    EventResponseDelta result(extension_id, extension_install_time);
    result.messages_to_extension.insert(message_);
@@ -124,17 +124,17 @@ author: Michael Gilbert <mgilbert@debian.org>
  // static
 --- a/extensions/browser/api/declarative_net_request/ruleset_manager.cc
 +++ b/extensions/browser/api/declarative_net_request/ruleset_manager.cc
-@@ -427,7 +427,7 @@ base::Optional<RulesetManager::Action> R
-     if (ruleset->matcher->ShouldRedirectRequest(params, &redirect_url)) {
-       Action action(Action::Type::REDIRECT);
-       action.redirect_url = std::move(redirect_url);
--      return action;
-+      return std::move(action);
-     }
+@@ -452,7 +452,7 @@ RulesetManager::GetRedirectOrUpgradeActi
+     Action action(Action::Type::REDIRECT);
+     action.redirect_url = std::move(redirect_action.redirect_url);
+     action.extension_ids.push_back(ruleset->extension_id);
+-    return action;
++    return std::move(action);
    }
  
-@@ -447,7 +447,7 @@ base::Optional<RulesetManager::Action> R
-   Action action(Action::Type::REMOVE_HEADERS);
+   return base::nullopt;
+@@ -476,7 +476,7 @@ base::Optional<RulesetManager::Action> R
+ 
    PopulateHeadersFromMask(mask, &action.request_headers_to_remove,
                            &action.response_headers_to_remove);
 -  return action;
@@ -144,7 +144,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  RulesetManager::Action RulesetManager::EvaluateRequestInternal(
 --- a/third_party/blink/renderer/modules/manifest/manifest_parser.cc
 +++ b/third_party/blink/renderer/modules/manifest/manifest_parser.cc
-@@ -627,7 +627,7 @@ ManifestParser::ParseShareTarget(const J
+@@ -622,7 +622,7 @@ ManifestParser::ParseShareTarget(const J
      return base::nullopt;
    }
  
@@ -153,7 +153,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  }
  
  base::Optional<mojom::blink::ManifestFileHandlerPtr>
-@@ -653,7 +653,7 @@ ManifestParser::ParseFileHandler(const J
+@@ -648,7 +648,7 @@ ManifestParser::ParseFileHandler(const J
      return base::nullopt;
    }
  
@@ -164,7 +164,7 @@ author: Michael Gilbert <mgilbert@debian.org>
  String ManifestParser::ParseRelatedApplicationPlatform(
 --- a/device/fido/device_response_converter.cc
 +++ b/device/fido/device_response_converter.cc
-@@ -536,7 +536,7 @@ base::Optional<cbor::Value> FixInvalidUT
+@@ -549,7 +549,7 @@ base::Optional<cbor::Value> FixInvalidUT
                                             PathPredicate predicate) {
    if (!ContainsInvalidUTF8(in)) {
      // Common case that everything is fine.
