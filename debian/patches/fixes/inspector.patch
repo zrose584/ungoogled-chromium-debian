@@ -116,3 +116,75 @@ author: Michael Gilbert <mgilbert@debian.org>
    span<uint8_t> cbor;
    std::vector<uint8_t> converted_cbor;
    if (IsCBORMessage(message)) {
+--- a/v8/third_party/inspector_protocol/encoding/encoding.cc
++++ b/v8/third_party/inspector_protocol/encoding/encoding.cc
+@@ -11,7 +11,7 @@
+ #include <limits>
+ #include <stack>
+ 
+-namespace v8_inspector_protocol_encoding {
++namespace inspector_protocol_encoding {
+ // =============================================================================
+ // Status and Error codes
+ // =============================================================================
+@@ -2231,4 +2231,4 @@ Status ConvertJSONToCBOR(const Platform&
+   return ConvertJSONToCBORTmpl(platform, json, cbor);
+ }
+ }  // namespace json
+-}  // namespace v8_inspector_protocol_encoding
++}  // namespace inspector_protocol_encoding
+--- a/v8/third_party/inspector_protocol/encoding/encoding.h
++++ b/v8/third_party/inspector_protocol/encoding/encoding.h
+@@ -14,7 +14,7 @@
+ #include <string>
+ #include <vector>
+ 
+-namespace v8_inspector_protocol_encoding {
++namespace inspector_protocol_encoding {
+ // This library is designed to be portable. The only allowed dependency
+ // are the C/C++ standard libraries, up to C++11. We support both 32 bit
+ // and 64 architectures.
+@@ -537,6 +537,6 @@ Status ConvertJSONToCBOR(const Platform&
+                          span<uint16_t> json,
+                          std::string* cbor);
+ }  // namespace json
+-}  // namespace v8_inspector_protocol_encoding
++}  // namespace inspector_protocol_encoding
+ 
+ #endif  // V8_INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
+--- a/v8/third_party/inspector_protocol/encoding/encoding_test.cc
++++ b/v8/third_party/inspector_protocol/encoding/encoding_test.cc
+@@ -18,7 +18,7 @@
+ 
+ using testing::ElementsAreArray;
+ 
+-namespace v8_inspector_protocol_encoding {
++namespace inspector_protocol_encoding {
+ 
+ class TestPlatform : public json::Platform {
+   bool StrToD(const char* str, double* result) const override {
+@@ -2044,4 +2044,4 @@ TYPED_TEST(ConvertJSONToCBORTest, RoundT
+   EXPECT_EQ(expected_json, roundtrip_json);
+ }
+ }  // namespace json
+-}  // namespace v8_inspector_protocol_encoding
++}  // namespace inspector_protocol_encoding
+--- a/v8/third_party/inspector_protocol/encoding/encoding_test_helper.h
++++ b/v8/third_party/inspector_protocol/encoding/encoding_test_helper.h
+@@ -16,7 +16,7 @@
+ #include "testing/gmock/include/gmock/gmock.h"
+ #include "testing/gtest/include/gtest/gtest.h"
+ 
+-namespace v8_inspector_protocol_encoding {
++namespace inspector_protocol_encoding {
+ 
+ std::string UTF16ToUTF8(span<uint16_t> in) {
+   return v8_inspector::UTF16ToUTF8(in.data(), in.size());
+@@ -28,6 +28,6 @@ std::vector<uint16_t> UTF8ToUTF16(span<u
+   return std::vector<uint16_t>(utf16.begin(), utf16.end());
+ }
+ 
+-}  // namespace v8_inspector_protocol_encoding
++}  // namespace inspector_protocol_encoding
+ 
+ #endif  // V8_INSPECTOR_PROTOCOL_ENCODING_ENCODING_TEST_HELPER_H_

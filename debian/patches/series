@@ -21,7 +21,6 @@ gcc/unterminated-apostrophe.patch
 fixes/link.patch
 fixes/mojo.patch
 fixes/brace.patch
-fixes/closure.patch
 fixes/ps-print.patch
 fixes/as-needed.patch
 fixes/inspector.patch
@@ -84,3 +83,5 @@ buster/vpx17.patch
 
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/manpage.patch
+ungoogled-chromium/disable-content-test.patch
+ungoogled-chromium/disable-unrecognized-warnings.patch

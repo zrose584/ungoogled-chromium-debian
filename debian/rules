@@ -37,14 +37,14 @@ export CXXFLAGS+=-Wno-pedantic \
                  -Wno-unused-result \
                  -Wno-unused-function \
                  -Wno-unused-variable \
-                 -Wno-unused-but-set-variable \
                  -Wno-deprecated-declarations \
+                 #-Wno-unused-but-set-variable \
 
 # ignore warnings for minor mistakes that are too common
 export CXXFLAGS+=-Wno-return-type \
                  -Wno-parentheses \
                  -Wno-dangling-else \
-                 -Wno-misleading-indentation \
+                 #-Wno-misleading-indentation \
 
 # ignore warnings due to gcc bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84055)
 export CXXFLAGS+=-Wno-ignored-attributes
@@ -55,9 +55,9 @@ export CXXFLAGS+=-Wno-unknown-pragmas
 # ingore new gcc 8 warnings that aren't yet handled upstream
 export CXXFLAGS+=-Wno-address \
                  -Wno-array-bounds \
-                 -Wno-class-memaccess \
                  -Wno-invalid-offsetof \
-                 -Wno-subobject-linkage \
+                 #-Wno-subobject-linkage \
+                 #-Wno-class-memaccess \
 
 # do not optimize away null pointer safety checks
 export CXXFLAGS+=-fno-delete-null-pointer-checks

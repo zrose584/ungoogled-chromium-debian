@@ -1,0 +1,23 @@
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -163,9 +163,6 @@ group("gn_all") {
+       "//components/viz:viz_unittests",
+       "//components/viz/common:viz_benchmark",
+       "//content/shell:content_shell",
+-      "//content/test:content_browsertests",
+-      "//content/test:content_perftests",
+-      "//content/test:content_unittests",
+       "//gpu:gpu_unittests",
+       "//ipc:ipc_tests",
+       "//media:media_unittests",
+--- a/content/browser/native_file_system/mock_native_file_system_permission_context.h
++++ b/content/browser/native_file_system/mock_native_file_system_permission_context.h
+@@ -66,7 +66,7 @@ class MockNativeFileSystemPermissionCont
+       std::unique_ptr<NativeFileSystemWriteItem> item,
+       int process_id,
+       int frame_id,
+-      base::OnceCallback<void(SafeBrowsingResult)> callback) override;
++      base::OnceCallback<void(SafeBrowsingResult)> callback);
+   MOCK_METHOD4(PerformSafeBrowsingChecks_,
+                void(NativeFileSystemWriteItem* item,
+                     int process_id,
