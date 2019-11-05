@@ -28,7 +28,6 @@ fixes/jumbo-namespace.patch
 fixes/template-export.patch
 fixes/widevine-locations.patch
 
-disable/tracing.patch
 disable/openh264.patch
 disable/chromeos.patch
 disable/installer.patch
@@ -71,3 +70,4 @@ fedora/vaapi-fix.patch
 
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/manpage.patch
+ungoogled-chromium/disable-unrecognized-warnings.patch
