@@ -37,14 +37,14 @@ export CXXFLAGS+=-Wno-pedantic \
                  -Wno-unused-result \
                  -Wno-unused-function \
                  -Wno-unused-variable \
-                 -Wno-unused-but-set-variable \
                  -Wno-deprecated-declarations \
+                 #-Wno-unused-but-set-variable \
 
 # ignore warnings for minor mistakes that are too common
 export CXXFLAGS+=-Wno-return-type \
                  -Wno-parentheses \
                  -Wno-dangling-else \
-                 -Wno-misleading-indentation \
+                 #-Wno-misleading-indentation \
 
 # ignore warnings due to gcc bug (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84055)
 export CXXFLAGS+=-Wno-ignored-attributes
@@ -55,9 +55,9 @@ export CXXFLAGS+=-Wno-unknown-pragmas
 # ingore new gcc 8 warnings that aren't yet handled upstream
 export CXXFLAGS+=-Wno-address \
                  -Wno-array-bounds \
-                 -Wno-class-memaccess \
                  -Wno-invalid-offsetof \
-                 -Wno-subobject-linkage \
+                 #-Wno-subobject-linkage \
+                 #-Wno-class-memaccess \
 
 # do not optimize away null pointer safety checks
 export CXXFLAGS+=-fno-delete-null-pointer-checks
@@ -86,6 +86,7 @@ endif
 
 ungoogled_chromium_version=$(shell cat debian/ungoogled-upstream/version.txt)
 ungoogled_chromium_files=debian/ungoogled-upstream/ungoogled-chromium
+domsubcache=debian/domsubcache.tar.gz
 
 # add gn flags from ungoogled-chromium
 defines+=$(shell cat $(ungoogled_chromium_files)/flags.gn | tr "\n" " " | sed 's/"/\\"/g')
@@ -96,6 +97,7 @@ defines+=is_debug=false \
          use_ozone=false \
          use_sysroot=false \
          use_openh264=false \
+         use_allocator=\"none\" \
          use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
@@ -147,8 +149,6 @@ endif
 flotpaths=/usr/share/javascript/jquery/*min.js \
           /usr/share/javascript/jquery-flot/*min.js \
 
-domsubcache=debian/domsubcache.tar.gz
-
 %:
 	dh $@
 
@@ -156,6 +156,8 @@ out/Release/gn:
 	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(njobs)
 
 override_dh_auto_configure:
+	# make lite
+	python3 -B debian/make_lite.py
 	# output compiler information
 	$(CXX) --version
 	# apply domain substitution
