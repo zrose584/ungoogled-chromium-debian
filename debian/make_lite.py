@@ -22,10 +22,12 @@ for file in lines:
     if os.path.isfile(abs_file):
         n_files += 1
         os.remove(abs_file)
+        print("removed file: {}".format(file))
     elif os.path.isdir(abs_file):
         n_dirs += 1
         shutil.rmtree(abs_file)
-    else:
-        print("[{}] no file: {}".format(me, file))
+        print("removed directory: {}".format(file))
+    #else:
+    #    print("[{}] no such file: {}".format(me, file))
 
 print("[{}] deleted {} directories and {} files".format(me, n_dirs, n_files))

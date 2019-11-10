@@ -9,24 +9,24 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 # indicate that binary targets do not require root
 export DEB_RULES_REQUIRES_ROOT=no
 
-## default to gcc when compiler environment variables are unset
-#export AR=ar
-#export NM=nm
-#export CC?=gcc
-#export CXX?=g++
+# default to gcc when compiler environment variables are unset
+export AR=ar
+export NM=nm
+export CC?=gcc
+export CXX?=g++
 
-# use system LLVM via unbundling
-export AR=llvm-ar-8
-export NM=llvm-nm-8
-export CC=clang-8
-export CXX=clang++-8
+## use system LLVM via unbundling
+#export AR=llvm-ar-8
+#export NM=llvm-nm-8
+#export CC=clang-8
+#export CXX=clang++-8
 
-# hack to allow clang to find the default cfi_blacklist.txt
-export CXXFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
-
-export CPPFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
-
-export CFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
+## hack to allow clang to find the default cfi_blacklist.txt
+#export CXXFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
+#
+#export CPPFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
+#
+#export CFLAGS+=-resource-dir=$(shell clang-8 --print-resource-dir) \
 
 
 # more verbose linker output
@@ -62,8 +62,8 @@ export CXXFLAGS+=-Wno-address \
 # do not optimize away null pointer safety checks
 export CXXFLAGS+=-fno-delete-null-pointer-checks
 
-## disable clang options
-#defines=is_clang=false clang_use_chrome_plugins=false
+# disable clang options
+defines=is_clang=false clang_use_chrome_plugins=false
 
 # build using system toolchain
 defines+=host_toolchain=\"//build/toolchain/linux/unbundle:default\"
@@ -86,9 +86,10 @@ endif
 
 ungoogled_chromium_version=$(shell cat debian/ungoogled-upstream/version.txt)
 ungoogled_chromium_files=debian/ungoogled-upstream/ungoogled-chromium
+domsubcache=debian/domsubcache.tar.gz
 
 # add gn flags from ungoogled-chromium
-defines+=$(shell cat $(ungoogled_chromium_files)/flags.gn | tr "\n" " " | sed 's/"/\\"/g')
+defines+=$(shell cat $(ungoogled_chromium_files)/flags.gn | tr "\n" " " | sed 's/"/\\"/g')  # TMP
 
 # disabled features
 defines+=is_debug=false \
@@ -96,6 +97,7 @@ defines+=is_debug=false \
          use_ozone=false \
          use_sysroot=false \
          use_openh264=false \
+				 use_allocator=\"none\" \
          use_libjpeg_turbo=true \
          use_custom_libcxx=false \
          use_gnome_keyring=false \
@@ -131,7 +133,6 @@ defines+=use_gio=true \
          proprietary_codecs=true \
          ffmpeg_branding=\"Chrome\" \
          fieldtrial_testing_like_official_build=true \
-         is_clang=true \
 
 # some notes about embedded libraries
 #  can't use system nss since net/third_party/nss is heavily patched
@@ -147,8 +148,6 @@ endif
 flotpaths=/usr/share/javascript/jquery/*min.js \
           /usr/share/javascript/jquery-flot/*min.js \
 
-domsubcache=debian/domsubcache.tar.gz
-
 %:
 	dh $@
 
@@ -156,6 +155,8 @@ out/Release/gn:
 	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(njobs)
 
 override_dh_auto_configure:
+	# make lite
+	python3 -B debian/make_lite.py
 	# output compiler information
 	$(CXX) --version
 	# apply domain substitution
@@ -167,7 +168,6 @@ override_dh_auto_configure:
 	# strip out system third_party libraries
 	rm -f base/third_party/libevent/BUILD.gn build/config/freetype/freetype.gni
 	./debian/scripts/unbundle
-	./debian/make_lite.py
 
 override_dh_auto_build-arch: out/Release/gn
 	./out/Release/gn gen out/Release --args="$(defines)"

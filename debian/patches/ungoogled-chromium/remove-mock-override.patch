@@ -1,0 +1,11 @@
+--- a/content/browser/native_file_system/mock_native_file_system_permission_context.h
++++ b/content/browser/native_file_system/mock_native_file_system_permission_context.h
+@@ -66,7 +66,7 @@ class MockNativeFileSystemPermissionCont
+       std::unique_ptr<NativeFileSystemWriteItem> item,
+       int process_id,
+       int frame_id,
+-      base::OnceCallback<void(SafeBrowsingResult)> callback) override;
++      base::OnceCallback<void(SafeBrowsingResult)> callback);
+   MOCK_METHOD4(PerformSafeBrowsingChecks_,
+                void(NativeFileSystemWriteItem* item,
+                     int process_id,

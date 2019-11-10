@@ -84,3 +84,4 @@ buster/vpx17.patch
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/manpage.patch
 ungoogled-chromium/disable-unrecognized-warnings.patch
+ungoogled-chromium/remove-mock-override.patch
