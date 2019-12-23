@@ -1,0 +1,29 @@
+dist: bionic
+
+sudo: required
+language: bash
+
+#if: branch = master AND tag IS present
+if: tag IS present
+
+install:
+ #- echo 'deb https://download.opensuse.org/repositories/openSUSE:/Tools/xUbuntu_18.04/ ./' | sudo tee -a /etc/apt/sources.list
+ #- curl https://build.opensuse.org/projects/openSUSE:Tools/public_key | sudo apt-key add -
+  - sudo apt-get update
+  - sudo apt-get -y install osc
+
+script:
+  - set -e
+  - echo $TRAVIS_TAG
+  - echo $TRAVIS_BUILD_DIR
+  - echo $HOME
+  - echo $SECRET_TEST
+  - uname -a
+  - osc --version
+ #- mkdir -p $HOME/.config/.osc
+ #- echo -e "[general]\napiurl = https://api.opensuse.org\n\n[https://api.opensuse.org]\nuser = $OSC_USER\npass = $OSC_PASS" > $HOME/.config/.osc/oscrc
+  - echo -e "[general]\napiurl = https://api.opensuse.org\n\n[https://api.opensuse.org]\nuser = $OSC_USER\npass = $OSC_PASS" > $HOME/.oscrc
+  - osc co home:zrose584 obs-test1
+  - cd "home:zrose584/obs-test1"
+  - bash update.sh "$TRAVIS_TAG" "from_travis"
+  - osc commit -m "travis - update to '$TRAVIS_TAG'"
