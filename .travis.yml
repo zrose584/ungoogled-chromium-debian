@@ -3,8 +3,8 @@ dist: bionic
 sudo: required
 language: bash
 
-#if: branch = master AND tag IS present
-if: tag IS present
+if: branch = debian_buster AND tag IS present
+#if: tag IS present
 
 install:
  #- echo 'deb https://download.opensuse.org/repositories/openSUSE:/Tools/xUbuntu_18.04/ ./' | sudo tee -a /etc/apt/sources.list
